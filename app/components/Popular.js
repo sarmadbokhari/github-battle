@@ -20,6 +20,32 @@ function SelectLanguage(props) {
 	)
 }
 
+function ReposGrid(props) {
+	return (
+		<ul className='popular-list'>
+			{props.repos.map((repo, index) => {
+				return (
+					<li key={repo.name} className='popular-item'>
+						<div className="popular-rank">#{index + 1}</div>
+						<ul className="space-list-items">
+							<li>
+								<img src={repo.owner.avatar_url} alt="" className="avatar"/>
+							</li>
+							<li><a href={repo.html_url}>{repo.name}</a></li>
+							<li>@{repo.owner.login}</li>
+							<li>{repo.stargazers_count} stars</li>
+						</ul>
+					</li>
+				)
+			})}
+		</ul>
+	)
+}
+
+ReposGrid.propTypes = {
+	repos: PropTypes.array.isRequired
+}
+
 SelectLanguage.propTypes = {
 	selectedLanguage: PropTypes.string.isRequired,
 	onSelect: PropTypes.func.isRequired
@@ -31,27 +57,33 @@ class Popular extends React.Component {
 
 		this.state = {
 			selectedLanguage: 'All',
-			repos: null
+			repos: []
 		}
 
 		this.updateLanguage = this.updateLanguage.bind(this);
 	}
 
 	componentDidMount() {
-		// AJAX request
-		api.fetchPopularRepos(this.state.selectedLanguage)
-			.then(function(repos) {
-				console.log(repos);
-			})
+		this.updateLanguage(this.state.selectedLanguage);
 	}
 
 	updateLanguage(language) {
 		console.log(language);
 		this.setState(function() {
 			return {
-				selectedLanguage: language
+				selectedLanguage: language,
+				repos: []
 			}
 		})
+
+		api.fetchPopularRepos(language)
+			.then((repos) => {
+				this.setState(function() {
+					return {
+						repos: repos
+					}
+				})
+			})
 	}
 
 	render() {
@@ -60,6 +92,7 @@ class Popular extends React.Component {
 				<SelectLanguage
 					selectedLanguage={this.state.selectedLanguage}
 					onSelect={this.updateLanguage} />
+				<ReposGrid repos={this.state.repos} />
 			</div>
 		)
 	}
