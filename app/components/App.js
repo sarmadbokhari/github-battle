@@ -22,7 +22,7 @@ class App extends React.Component {
              <Route render={() => (<p>404 Not Found</p>)} />
            </Switch>
          </div>
-       </Router>
+      </Router>
     )
   }
 }
