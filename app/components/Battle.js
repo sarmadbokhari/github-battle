@@ -1,6 +1,25 @@
 var React = require('react');
 var PropTypes = require('prop-types');
 
+function PlayerPreview(props) {
+  return (
+    <div>
+      <div className="column">
+        <img src={props.avatar} alt={'Avatar for ' props.username} className="avatar"/>
+        <h2 className="username">@{props.username}</h2>
+      </div>
+      <button className="reset" onClick={props.onReset.bind(null, props.id)}>reset</button>
+    </div>
+  )
+}
+
+PlayerPreview.propTypes = {
+  avatar: PropTypes.string.isRequired,
+  username: PropTypes.string.isRequired,
+  id: PropTypes.string.isRequired,
+  onReset: PropTypes.func.isRequired
+}
+
 class PlayerInput extends React.Component {
   constructor(props) {
     super(props)
@@ -32,7 +51,7 @@ class PlayerInput extends React.Component {
   render() {
     return (
       <form className="column" onSubmit={this.handleSubmit}>
-        <label className='header' htmlFor="username">{this.props.label}</label>
+        <label className="header" htmlFor="username">{this.props.label}</label>
         <input
           type="text"
           id='username'
