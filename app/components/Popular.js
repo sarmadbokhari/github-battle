@@ -57,7 +57,7 @@ class Popular extends React.Component {
 
 		this.state = {
 			selectedLanguage: 'All',
-			repos: []
+			repos: null
 		}
 
 		this.updateLanguage = this.updateLanguage.bind(this);
@@ -72,7 +72,7 @@ class Popular extends React.Component {
 		this.setState(function() {
 			return {
 				selectedLanguage: language,
-				repos: []
+				repos: null
 			}
 		})
 
@@ -92,7 +92,8 @@ class Popular extends React.Component {
 				<SelectLanguage
 					selectedLanguage={this.state.selectedLanguage}
 					onSelect={this.updateLanguage} />
-				<ReposGrid repos={this.state.repos} />
+				{!this.state.repos
+					? <p>Loading</p> : <ReposGrid repos={this.state.repos} />}
 			</div>
 		)
 	}
